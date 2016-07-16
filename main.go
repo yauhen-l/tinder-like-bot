@@ -35,7 +35,7 @@ func main() {
 
 	filterJson, err := ioutil.ReadFile(*filterFile)
 	if err != nil {
-		log.Fatal("failed to read filter file %q due: %s", *filterFile, err)
+		log.Fatalf("failed to read filter file %q due: %s", *filterFile, err)
 	}
 	err = json.Unmarshal(filterJson, &filter)
 	if err != nil {
@@ -44,13 +44,13 @@ func main() {
 
 	fbUserId, err := getFacebookUserId(*fbtoken)
 	if err != nil {
-		log.Fatal("failed to get facebook user ID: %s", err)
+		log.Fatalf("failed to get facebook user ID: %s", err)
 	}
 
 	t = tinder.Init(fbUserId, *fbtoken)
 	err = t.Auth()
 	if err != nil || len(t.Me.Token) == 0 {
-		log.Fatal("failed to authenticate into Tinder: %s", err)
+		log.Fatalf("failed to authenticate into Tinder: %s", err)
 	}
 
 	log.Printf("Logged in into Tinder as: %+v", t.Me)
