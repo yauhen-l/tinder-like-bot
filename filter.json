@@ -1,0 +1,5 @@
+{
+    "ExcludeName": ["sam", "bob", "Anna", "Olya"],
+    "Schools": ["oxford", "University"],
+    "CommonInterests": ["dog", "skiing"]
+}
