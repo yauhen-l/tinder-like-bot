@@ -23,7 +23,8 @@ Usage of ./tinder-like-bot:
   -filter string
         path to filter file (default "filter.json")
   -yes-limit int
-        limit of likes to stop (default 30)```
+        limit of likes to stop (default 30)
+```
 
 filter.json contents description:
 ```
