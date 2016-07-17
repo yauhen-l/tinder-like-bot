@@ -15,6 +15,7 @@ import (
 
 var t *tinder.Tinder
 var likes = 0
+var matches = 0
 var yesLimit int
 var keepSearching = true
 var filter Filter
@@ -68,19 +69,22 @@ func main() {
 
 		log.Printf("you like %s. match=%v", id, match)
 		likes++
+		if match {
+			matches++
+		}
 		if likes >= yesLimit {
 			keepSearching = false
 			log.Printf("already liked %d", likes)
 			break
 		}
 	}
-	log.Printf("liked this time: %d", likes)
+	log.Printf("liked this time: %d, macthed: %d", likes, matches)
 	log.Println("exit")
 }
 
 func like(id string) (bool, error) {
 	if dryRun {
-		return true, nil
+		return false, nil
 	}
 	return t.Like(id)
 }
@@ -146,7 +150,7 @@ func match(rec tinder.Recommendation) (string, bool) {
 		return fmt.Sprintf("school matched: %s", school), true
 	}
 
-	if intereset, ok := containsAny(rec.CommonInterestsNames(), filter.CommonInterests); ok {
+	if intereset, ok := containsAny(append(rec.CommonInterestsNames(), rec.Bio), filter.CommonInterests); ok {
 		return fmt.Sprintf("interest matched: %s", intereset), true
 	}
 
