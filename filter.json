@@ -1,5 +1,9 @@
 {
     "ExcludeName": ["sam", "bob", "Anna", "Olya"],
     "Schools": ["oxford", "University"],
-    "CommonInterests": ["dog", "skiing"]
+    "CommonInterests": ["dog", "skiing"],
+    "IncludeName": ["Dan", "Tim"],
+    "Jobs":["Banking","Finance"],
+    "Companies":["RBS","Goldman Sachs"],
+    "ExcludeCompanies":["HSBC"]
 }
