@@ -5,12 +5,13 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/yauhen-l/tinder"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 	"sync"
+
+	"github.com/yauhen-l/tinder"
 )
 
 var t *tinder.Tinder
@@ -22,9 +23,13 @@ var filter Filter
 var dryRun bool
 
 type Filter struct {
-	ExcludeName     []string
-	Schools         []string
-	CommonInterests []string
+	ExcludeName      []string
+	Schools          []string
+	CommonInterests  []string
+	IncludeName      []string
+	Jobs             []string
+	Companies        []string
+	ExcludeCompanies []string
 }
 
 func main() {
@@ -144,6 +149,26 @@ func containsAny(text []string, keys []string) (string, bool) {
 func match(rec tinder.Recommendation) (string, bool) {
 	if name, ok := containsAny([]string{rec.Name}, filter.ExcludeName); ok {
 		return fmt.Sprintf("name exlusion: %s", name), false
+	}
+
+	// exclude companies first
+	if name, ok := containsAny(append(rec.CompanyNames(), rec.Bio), filter.ExcludeCompanies); ok {
+		return fmt.Sprintf("company exlusion: %s", name), false
+	}
+
+	// include name
+	if name, ok := containsAny([]string{rec.Name}, filter.IncludeName); ok {
+		return fmt.Sprintf("name matched: %s", name), true
+	}
+
+	// match jobs
+	if job, ok := containsAny(append(rec.JobNames(), rec.Bio), filter.Jobs); ok {
+		return fmt.Sprintf("job matched: %s", job), true
+	}
+
+	// match companies
+	if company, ok := containsAny(append(rec.CompanyNames(), rec.Bio), filter.Companies); ok {
+		return fmt.Sprintf("company matched: %s", company), true
 	}
 
 	if school, ok := containsAny(rec.SchoolsNames(), filter.Schools); ok {
